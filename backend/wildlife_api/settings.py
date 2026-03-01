@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -53,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 
 ROOT_URLCONF = 'wildlife_api.urls'
 
@@ -130,11 +132,10 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 # Add CORS settings
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # React dev server
-]
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Media files (for uploaded images)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 AUTH_USER_MODEL = 'accounts.User'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
