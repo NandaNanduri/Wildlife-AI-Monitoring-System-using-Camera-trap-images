@@ -2,16 +2,20 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 class User(AbstractUser):
-    ROLE_CHOICES = (
-        ('admin', 'Admin'),
-        ('conservationist', 'Conservationist'),
-    )
+    username = None  # only if you want email login only
 
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
     email = models.EmailField(unique=True)
 
+    is_admin = models.BooleanField(default=False)
+    is_conservationist = models.BooleanField(default=True)
+
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = []
 
     def __str__(self):
         return self.email
+    
+
+"""
+Password already there since im inheriting from Abstract User
+"""

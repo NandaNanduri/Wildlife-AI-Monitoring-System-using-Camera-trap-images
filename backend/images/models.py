@@ -8,7 +8,7 @@ class Image(models.Model):
     uploaded_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        limit_choices_to={'role': 'conservationist'}
+        limit_choices_to={'is_conservationist': True}
     )
 
     def __str__(self):

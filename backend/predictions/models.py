@@ -1,4 +1,7 @@
 from django.db import models
+from images.models import Image
+from django.conf import settings
+
 
 class Species(models.Model):
     species_name = models.CharField(max_length=100)
@@ -18,13 +21,27 @@ class AIModel(models.Model):
     
 
 class Prediction(models.Model):
-    image = models.ForeignKey(Image, on_delete=models.CASCADE)
-    species = models.ForeignKey(Species, on_delete=models.SET_NULL, null=True)
+    image = models.ForeignKey(Image, on_delete=models.CASCADE, related_name="predictions")
+    species = models.ForeignKey(Species, on_delete=models.SET_NULL, null=True, blank=True)
     model_used = models.ForeignKey(AIModel, on_delete=models.SET_NULL, null=True)
-    
+
     confidence_score = models.FloatField()
     is_empty = models.BooleanField(default=False)
     predicted_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Prediction for Image {self.image.id}"
+    
+
+class Dataset(models.Model):
+    dataset_name = models.CharField(max_length=100)
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        limit_choices_to={'is_admin': True}
+    )
+    model_linked = models.ForeignKey(AIModel, on_delete=models.SET_NULL, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.dataset_name
