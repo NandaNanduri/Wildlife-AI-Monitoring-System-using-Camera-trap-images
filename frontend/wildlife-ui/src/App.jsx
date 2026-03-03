@@ -1,8 +1,12 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import AdminLayout from "./layouts/AdminLayout";
+import ConservationistLayout from "./layouts/ConservationistLayout";
 import Dashboard from "./pages/admin/Dashboard";
 import UserManagement from "./pages/admin/UserManagement";
+import ConservationistDashboard from "./pages/conservationist/Dashboard";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Home from "./pages/Home";
 
 function AdminRoute({ children }) {
   const token = localStorage.getItem("access_token");
@@ -12,31 +16,31 @@ function AdminRoute({ children }) {
   return children;
 }
 
+function ConservationistRoute({ children }) {
+  const token = localStorage.getItem("access_token");
+  const isCons = localStorage.getItem("is_conservationist") === "true";
+  if (!token || !isCons) return <Navigate to="/login" replace />;
+  return children;
+}
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
-        {/* Admin routes */}
-        <Route
-          path="/admin"
-          element={
-            <AdminRoute>
-              <AdminLayout />
-            </AdminRoute>
-          }
-        >
+        <Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="users" element={<UserManagement />} />
         </Route>
 
-        {/* TODO: Conservationist routes */}
-        {/* <Route path="/conservationist" element={<ConservationistRoute><ConservationistLayout /></ConservationistRoute>}>
+        <Route path="/conservationist" element={<ConservationistRoute><ConservationistLayout /></ConservationistRoute>}>
+          <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<ConservationistDashboard />} />
-        </Route> */}
+        </Route>
       </Routes>
     </BrowserRouter>
   );

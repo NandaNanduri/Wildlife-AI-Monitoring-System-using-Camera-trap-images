@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 export default function Login() {
@@ -142,6 +143,11 @@ export default function Login() {
                             )}
                         </button>
                     </form>
+
+                    <p className="text-center text-xs text-[#4a7a5a] mt-5">
+                        Don't have an account?{" "}
+                        <Link to="/register" className="text-[#52b788] hover:underline">Register</Link>
+                    </p>
                 </div>
 
                 <p className="text-center text-xs text-[#2d4a38] mt-6">
