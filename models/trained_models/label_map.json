@@ -1,0 +1,45 @@
+{
+  "species_classes": [
+    "cheetah",
+    "empty",
+    "giraffe",
+    "hyenaspotted",
+    "impala",
+    "leopard",
+    "lion",
+    "wildebeest",
+    "zebra"
+  ],
+  "species2idx": {
+    "cheetah": 0,
+    "empty": 1,
+    "giraffe": 2,
+    "hyenaspotted": 3,
+    "impala": 4,
+    "leopard": 5,
+    "lion": 6,
+    "wildebeest": 7,
+    "zebra": 8
+  },
+  "idx2species": {
+    "0": "cheetah",
+    "1": "empty",
+    "2": "giraffe",
+    "3": "hyenaspotted",
+    "4": "impala",
+    "5": "leopard",
+    "6": "lion",
+    "7": "wildebeest",
+    "8": "zebra"
+  },
+  "tod_classes": [
+    "day",
+    "night",
+    "unknown"
+  ],
+  "tod2idx": {
+    "day": 0,
+    "night": 1,
+    "unknown": 2
+  }
+}

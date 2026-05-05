@@ -1,0 +1,29 @@
+{
+  "architecture": "EfficientNet-B3",
+  "dataset": "Snapshot Serengeti S3",
+  "num_species": 9,
+  "species_classes": [
+    "cheetah",
+    "empty",
+    "giraffe",
+    "hyenaspotted",
+    "impala",
+    "leopard",
+    "lion",
+    "wildebeest",
+    "zebra"
+  ],
+  "tod_classes": [
+    "day",
+    "night",
+    "unknown"
+  ],
+  "img_size": 300,
+  "batch_size": 24,
+  "best_val_species_acc": 0.8947839046199701,
+  "total_parameters_M": 11.8,
+  "total_training_images": 13419,
+  "total_val_images": 3355,
+  "checkpoint": "efficientnet_b3_serengeti_best.pth",
+  "loss_function": "FocalLoss (gamma=2.0) for species, CrossEntropy for ToD, BCEWithLogits for empty"
+}

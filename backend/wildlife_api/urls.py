@@ -16,8 +16,24 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from accounts.admin_views import AdminStatsView
+from django.conf.urls.static import static
+from django.views.static import serve
+import os
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/auth/', include('accounts.urls')),
+    path('api/images/', include('images.urls')),
+    path('api/training/', include('training.urls')),
+    path('api/predictions/', include('predictions.urls')),
+    path('api/admin/stats/', AdminStatsView.as_view(), name='admin_stats'),
+    path('api/model-management/', include('model_management.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += [
+    path('model-artifacts/<path:path>', serve, {
+        'document_root': os.path.join(settings.BASE_DIR, '..', 'models', 'trained_models')
+    }),
 ]

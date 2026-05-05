@@ -27,7 +27,13 @@ class Prediction(models.Model):
 
     confidence_score = models.FloatField()
     is_empty = models.BooleanField(default=False)
+    time_of_day = models.CharField(max_length=20, blank=True, default='unknown')
+    site = models.CharField(max_length=100, blank=True, default='unknown')
+    is_corrected = models.BooleanField(default=False)
+    notes = models.TextField(blank=True, default='')
     predicted_at = models.DateTimeField(auto_now_add=True)
+    captured_at = models.DateTimeField(null=True, blank=True)
+    is_hidden = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Prediction for Image {self.image.id}"
@@ -45,3 +51,39 @@ class Dataset(models.Model):
 
     def __str__(self):
         return self.dataset_name
+    
+
+
+class InsightSettings(models.Model):
+    # Numeric thresholds
+    predator_threshold        = models.IntegerField(default=3)
+    empty_frame_threshold     = models.FloatField(default=0.4)
+    nocturnal_threshold       = models.FloatField(default=0.7)
+    low_confidence_threshold  = models.FloatField(default=50.0)
+    min_detections_nocturnal  = models.IntegerField(default=3)
+    biodiversity_threshold    = models.FloatField(default=0.6)
+
+    # Species classifications (stored as comma-separated strings)
+    predator_species          = models.TextField(default='lion,leopard,cheetah,hyenaspotted')
+    prey_species              = models.TextField(default='zebra,wildebeest,impala,giraffe')
+    rare_species              = models.TextField(default='leopard,cheetah')
+    diurnal_species           = models.TextField(default='cheetah,impala,giraffe,zebra,wildebeest')
+    nocturnal_species         = models.TextField(default='leopard,hyenaspotted')
+
+    class Meta:
+        verbose_name = 'Insight Settings'
+
+    def get_predators(self):
+        return set(s.strip() for s in self.predator_species.split(',') if s.strip())
+
+    def get_prey(self):
+        return set(s.strip() for s in self.prey_species.split(',') if s.strip())
+
+    def get_rare(self):
+        return set(s.strip() for s in self.rare_species.split(',') if s.strip())
+
+    def get_diurnal(self):
+        return set(s.strip() for s in self.diurnal_species.split(',') if s.strip())
+
+    def get_nocturnal(self):
+        return set(s.strip() for s in self.nocturnal_species.split(',') if s.strip())

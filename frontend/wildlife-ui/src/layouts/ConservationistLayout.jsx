@@ -1,50 +1,119 @@
+import { useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
 import NatureIcon from "@mui/icons-material/Nature";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+
+const navItems = [
+    { label: "Dashboard", path: "/conservationist/dashboard", icon: <DashboardIcon fontSize="small" /> },
+];
 
 export default function ConservationistLayout() {
     const navigate = useNavigate();
+    const [profileOpen, setProfileOpen] = useState(false);
+
     const handleLogout = () => {
         localStorage.clear();
         navigate("/login");
     };
 
     return (
-        <div className="flex h-screen bg-[#0d1a12] text-[#d4e8d0] overflow-hidden">
-            <aside className="w-60 flex flex-col bg-[#0a1410] border-r border-[#1e3328] shrink-0">
-                <div className="flex items-center gap-3 px-4 py-5 border-b border-[#1e3328]">
-                    <div className="w-8 h-8 rounded-lg bg-[#2d6a4f] flex items-center justify-center shrink-0">
-                        <NatureIcon fontSize="small" className="text-[#95d5b2]" />
+        <div className="min-h-screen flex flex-col" style={{ background: "#f4f0e8" }}>
+
+            {/* ── Top Navigation ── */}
+            <header style={{ background: "#2a1a08", borderBottom: "1px solid #3a2a12" }}
+                className="shrink-0 sticky top-0 z-50">
+                <div className="flex items-center justify-between px-8 h-14">
+
+                    {/* Brand */}
+                    <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                            style={{ background: "#8a5c1a" }}>
+                            <NatureIcon fontSize="small" style={{ color: "#f5d88a" }} />
+                        </div>
+                        <span className="text-base font-semibold tracking-tight" style={{ color: "#f5d88a" }}>
+                            Wildlife<span style={{ color: "#d4a84a" }}>AI</span>
+                        </span>
+                        <span className="text-xs px-2 py-0.5 rounded-full ml-1 font-medium"
+                            style={{ background: "rgba(82,183,136,0.15)", color: "#52b788", border: "1px solid rgba(82,183,136,0.3)" }}>
+                            Conservationist
+                        </span>
                     </div>
-                    <span className="text-sm font-semibold tracking-wide text-[#95d5b2]">Wildlife AI</span>
+
+                    {/* Nav links */}
+                    <nav className="flex items-center gap-1">
+                        {navItems.map(item => (
+                            <NavLink
+                                key={item.path}
+                                to={item.path}
+                                className={({ isActive }) =>
+                                    `flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 ${isActive ? "text-[#f5d88a]" : "text-[#c4a070] hover:text-[#f5d88a] hover:bg-white/5"
+                                    }`
+                                }
+                                style={({ isActive }) => isActive
+                                    ? { background: "rgba(245,200,66,0.12)", borderBottom: "2px solid #f5c842" }
+                                    : { borderBottom: "2px solid transparent" }
+                                }
+                            >
+                                <span style={{ fontSize: 16 }}>{item.icon}</span>
+                                {item.label}
+                            </NavLink>
+                        ))}
+                    </nav>
+
+                    {/* Right — profile dropdown — same as admin */}
+                    <div className="relative">
+                        <button
+                            onClick={() => setProfileOpen(v => !v)}
+                            className="flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all"
+                            style={{ background: profileOpen ? "rgba(255,255,255,0.08)" : "transparent" }}
+                            onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.08)"}
+                            onMouseLeave={e => { if (!profileOpen) e.currentTarget.style.background = "transparent" }}
+                        >
+                            {/* Avatar — same brown/gold as admin */}
+                            <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold"
+                                style={{ background: "#8a5c1a", color: "#f5d88a" }}>
+                                C
+                            </div>
+                            {/* Label — same golden as admin */}
+                            <span className="text-sm font-medium" style={{ color: "#f5d88a" }}>My Account</span>
+                            <KeyboardArrowDownIcon fontSize="small" style={{ color: "#c4a070", fontSize: 18 }} />
+                        </button>
+
+                        {profileOpen && (
+                            <div className="absolute right-0 top-full mt-1 w-44 rounded-xl shadow-xl overflow-hidden z-50"
+                                style={{ background: "#2a1a08", border: "1px solid #3a2a12" }}>
+                                <NavLink to="/conservationist/profile" onClick={() => setProfileOpen(false)}
+                                    className="flex items-center gap-2 px-4 py-3 text-sm transition-all"
+                                    style={{ color: "#c4a070" }}
+                                    onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.06)"; e.currentTarget.style.color = "#f5d88a" }}
+                                    onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#c4a070" }}>
+                                    <PersonIcon fontSize="small" />
+                                    Profile
+                                </NavLink>
+                                <div style={{ borderTop: "1px solid #3a2a12" }} />
+                                <button onClick={handleLogout}
+                                    className="flex items-center gap-2 px-4 py-3 text-sm w-full transition-all"
+                                    style={{ color: "#c4a070" }}
+                                    onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.06)"; e.currentTarget.style.color = "#e87060" }}
+                                    onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#c4a070" }}>
+                                    <LogoutIcon fontSize="small" />
+                                    Logout
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </div>
-                <nav className="flex-1 py-4 px-2 space-y-1">
-                    <NavLink to="/conservationist/dashboard"
-                        className={({ isActive }) =>
-                            `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all ${isActive ? "bg-[#2d6a4f] text-[#95d5b2] font-medium" : "text-[#7aab8a] hover:bg-[#1a2e22] hover:text-[#b7d9c2]"}`
-                        }>
-                        <DashboardIcon fontSize="small" />
-                        <span>Dashboard</span>
-                    </NavLink>
-                </nav>
-                <div className="px-2 pb-4 border-t border-[#1e3328] pt-3">
-                    <button onClick={handleLogout}
-                        className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm text-[#7aab8a] hover:bg-[#1a2e22] hover:text-red-400 transition-all">
-                        <LogoutIcon fontSize="small" />
-                        <span>Logout</span>
-                    </button>
-                </div>
-            </aside>
-            <div className="flex flex-col flex-1 overflow-hidden">
-                <header className="flex items-center justify-between px-6 py-4 bg-[#0a1410] border-b border-[#1e3328] shrink-0">
-                    <span className="text-xs text-[#4a7a5a] uppercase tracking-widest">Conservationist Panel</span>
-                    <div className="w-8 h-8 rounded-full bg-[#2d6a4f] flex items-center justify-center text-xs font-bold text-[#95d5b2]">C</div>
-                </header>
-                <main className="flex-1 overflow-y-auto p-6">
+            </header>
+
+            {/* ── Page Content ── */}
+            <main className="flex-1 overflow-y-auto">
+                <div className="max-w-7xl mx-auto px-8 py-8">
                     <Outlet />
-                </main>
-            </div>
+                </div>
+            </main>
         </div>
     );
 }
